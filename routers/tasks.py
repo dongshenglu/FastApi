@@ -47,7 +47,7 @@ def validate_user(user: user_dependency):
 
 def find_task(user: user_dependency, db: db_dependency, task_id: int = Path(gt=0)):
     task_model = (db.query(Tasks).filter(Tasks.id == task_id)
-                  .filter(int(Tasks.owner_id) == user.get('id')).first())
+                  .filter(Tasks.owner_id == user.get('id')).first())
     if task_model is not None:
         return task_model
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='Task not found.')
@@ -56,7 +56,7 @@ def find_task(user: user_dependency, db: db_dependency, task_id: int = Path(gt=0
 @router.get("/", status_code=status.HTTP_200_OK)
 async def read_all(user: user_dependency, db: db_dependency):
     validate_user(user)
-    return db.query(Tasks).filter(int(Tasks.owner_id) == user.get('id')).all()
+    return db.query(Tasks).filter(Tasks.owner_id == user.get('id')).all()
 
 
 @router.get("/tasks/{task_id}", status_code=status.HTTP_200_OK)
@@ -95,5 +95,5 @@ async def delete_task(user: user_dependency, db: db_dependency, task_id: int = P
     validate_user(user)
 
     find_task(user, db, task_id)
-    db.query(Tasks).filter(Tasks.id == task_id).filter(int(Tasks.owner_id) == user.get('id')).delete()
+    db.query(Tasks).filter(Tasks.id == task_id).filter(Tasks.owner_id == user.get('id')).delete()
     db.commit()
