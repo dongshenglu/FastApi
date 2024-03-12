@@ -1,0 +1,17 @@
+Generic single-database configuration.
+
+Changes configration after "alembic init alembic"
+1. In alembic.ini, set url.
+sqlalchemy.url = sqlite:///./taskManager.db
+
+2. in alembic\env.py
+
+2.1 import models
+
+2.2
+# Interpret the config file for Python logging.
+# This line sets up loggers basically.
+fileConfig(config.config_file_name)
+
+2.3 target_metadata = models.Base.metadata
+
